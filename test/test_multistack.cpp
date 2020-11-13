@@ -41,20 +41,22 @@ TEST(multistack, can_use_operator_equal)
 }
 
 
-TEST(multistack, can_push_and_pull_out_of_size)
+TEST(multistack, can_push_and_pull_out_of_size)//в этом тесте как раз и проверяется relocation
 {
 	TMultiStack<int> B(10, 3);
 	B.push(1, 0);
 	B.push(2, 0);
 	B.push(3, 0);
 	B.push(4, 0);
+	B.push(5, 0);
+	EXPECT_EQ(5, B.pull(0));
 	EXPECT_EQ(4, B.pull(0));
 	EXPECT_EQ(3, B.pull(0));
 	EXPECT_EQ(2, B.pull(0));
 	EXPECT_EQ(1, B.pull(0));
 }
 
-TEST(multistack, can_push_and_pull_out_of_size_2)
+TEST(multistack, can_push_and_pull_out_of_size_2)//и в этом
 {
 	TMultiStack<char> B(20, 5);
 	B.push('U', 0);
@@ -118,4 +120,35 @@ TEST(multistack, multisatck_is_empty)
 	B.push('T', 1);
 
 	ASSERT_ANY_THROW(B.pull(2));
+}
+
+TEST(multistack, use_reverse)
+{
+	TMultiStack<int> B(10, 3);
+	B.push(1, 0);
+	B.push(2, 1);
+	B.push(-2, 1);
+	B.push(3, 2);
+	B.push(4, 2);
+
+	B.reverse();
+	EXPECT_EQ(4, B.pull(0));
+	EXPECT_EQ(3, B.pull(0));
+	EXPECT_EQ(-2, B.pull(1));
+	EXPECT_EQ(2, B.pull(1));
+	EXPECT_EQ(1, B.pull(2));
+}
+
+TEST(multistack, can_found_stack_with_max_elem)
+{
+	TMultiStack<int> A(9, 3);
+	A.push(3, 0);
+	A.push(2, 1);
+	A.push(-1, 0);
+	A.push(5, 0);
+	A.push(6, 1);
+	A.push(-1, 0);
+	A.push(5, 0);
+
+	EXPECT_EQ(1, A.stack_with_max_elem());
 }

@@ -14,6 +14,7 @@ int main()
 	A.push(-1, 0);
 	A.push(5, 0);
 
+	cout << A.stack_with_max_elem();
 
 	return 0;
 	

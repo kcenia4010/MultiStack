@@ -26,6 +26,9 @@ public:
 
 	void push(T elem, int i);
 	T pull(int i);
+
+	int stack_with_max_elem();
+	void reverse();
 };
 
 
@@ -137,6 +140,54 @@ T TMultiStack<T>::pull(int i)
 	T result = stacks[i].pull();
 	 return result;
  }
+
+template<class T>
+inline int TMultiStack<T>::stack_with_max_elem()
+{
+	if (stack_count == 0) throw logic_error("out_of_range");
+	T tmp;
+	T max;
+	int rezult;
+	for (int i = 0; i < stack_count; i++)
+	{
+		for (int j = 0; j < stacks[i].GetCount(); j++)
+		{
+			tmp = this->pull(i);
+			if ((i == 0) && (j == 0))
+			{
+				max = tmp;
+				rezult = i;
+			}
+			else if (tmp > max)
+			{
+				max = tmp;
+				rezult = i;
+			}
+		}
+	}
+	return rezult;
+}
+
+template<class T>
+inline void TMultiStack<T>::reverse()
+{
+	TMultiStack<T> tmp (this->size, this->stack_count);
+	TMultiStack<T> rezult(this->size, this->stack_count);
+	int top;
+	for (int i = 0; i < stack_count; i++)
+	{
+		top = stacks[i].GetCount();
+		for (int j = 0; j < top; j++)
+		{
+			tmp.push(this->pull(i), i);
+		}
+		for (int j = 0; j < top; j++)
+		{
+			rezult.push(tmp.pull(i), stack_count - i - 1);
+		}
+	}
+	*this = rezult;
+}
 
 template<class T>
 inline void TMultiStack<T>::StackRelocation(int index)
